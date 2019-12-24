@@ -24,7 +24,8 @@ class ProjectsController extends Controller
                 'description',
             ])
         );
-        
+
         // redirect
+        return redirect('/projects');
     }
 }

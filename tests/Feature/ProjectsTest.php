@@ -31,10 +31,9 @@ class ProjectsTest extends TestCase
             'description' => $this->faker->paragraph,
         ];
 
-        // when
-        $this->post('/projects', $attributes);
+        // when & then
+        $this->post('/projects', $attributes)->assertRedirect('/projects');
 
-        // then
         $this->assertDatabaseHas('projects', $attributes);
 
         $this->get('/projects')->assertSee($attributes['title']);
