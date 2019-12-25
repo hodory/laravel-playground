@@ -26,10 +26,7 @@ class ProjectsTest extends TestCase
         $this->withoutExceptionHandling();
 
         // given
-        $attributes = [
-            'title' => $this->faker->sentence,
-            'description' => $this->faker->paragraph,
-        ];
+        $attributes = factory('App\Project')->raw();
 
         // when & then
         $this->post('/projects', $attributes)->assertRedirect('/projects');
@@ -44,7 +41,8 @@ class ProjectsTest extends TestCase
      */
     public function a_project_requires_a_title() {
         $this->withoutMiddleware();
-        $this->post('/projects', [])->assertSessionHasErrors('title');
+        $attributes = factory('App\Project')->raw(['title' => '']);
+        $this->post('/projects', $attributes)->assertSessionHasErrors('title');
     }
 
     /**
@@ -52,6 +50,7 @@ class ProjectsTest extends TestCase
      */
     public function a_project_requires_a_description() {
         $this->withoutMiddleware();
-        $this->post('/projects', [])->assertSessionHasErrors('description');
+        $attributes = factory('App\Project')->raw(['description' => '']);
+        $this->post('/projects', $attributes)->assertSessionHasErrors('description');
     }
 }
