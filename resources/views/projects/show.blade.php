@@ -16,27 +16,41 @@
                 <div class="mb-8">
                     <h2 class="text-grey font-normal text-lg mb-3">Tasks</h2>
                     @foreach($project->tasks as $task)
-                        <div class="card mb-3">{{$task->body}}</div>
+                        <div class="card mb-3">
+                            <form method="POST" action="{{$task->path()}}">
+                                @method('PATCH')
+                                @csrf
+
+                                <div class="flex">
+                                    <input name="body" class="w-full {{$task->completed ? 'text-grey' : ''}}"
+                                           value="{{$task->body}}"/>
+                                    <input type="checkbox" name="completed"
+                                           onchange="this.form.submit();"
+                                           value={{$task->completed}}"
+                                           {{$task->completed ? 'checked' : ''}}/>
+                                </div>
+                            </form>
+                        </div>
                     @endforeach
 
-                    <div class="card mb-3">
-                        <form action="{{$project->path() ."/tasks"}}" method="POST">
-                            @csrf
-                            <input name="body" class="w-full" placeholder="Add a new task"/>
-                        </form>
-                    </div>
+                                               <div class=" card mb-3">
+                                    <form action="{{$project->path() ."/tasks"}}" method="POST">
+                                        @csrf
+                                        <input name="body" class="w-full" placeholder="Add a new task"/>
+                                    </form>
+                                </div>
+                        </div>
+
+                        <div>
+                            <h2 class="text-grey font-normal text-lg mb-3">General Notes</h2>
+
+                            {{-- general notes--}}
+                            <textarea class="card w-full" style="min-height: 200px;">Lorem ipsum.</textarea>
+                        </div>
                 </div>
-
-                <div>
-                    <h2 class="text-grey font-normal text-lg mb-3">General Notes</h2>
-
-                    {{-- general notes--}}
-                    <textarea class="card w-full" style="min-height: 200px;">Lorem ipsum.</textarea>
+                <div class="lg:w-1/4 px-3">
+                    @include('projects.card')
                 </div>
             </div>
-            <div class="lg:w-1/4 px-3">
-                @include('projects.card')
-            </div>
-        </div>
     </main>
 @endsection
