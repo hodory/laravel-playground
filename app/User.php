@@ -38,6 +38,6 @@ class User extends Authenticatable
 
     public function projects()
     {
-        return $this->hasMany(Project::class, 'owner_id'); // relation is base on `SnakeCased ClassBaseName` and `Model's P.K.`
+        return $this->hasMany(Project::class, 'owner_id')->latest('updated_at'); // relation is base on `SnakeCased ClassBaseName` and `Model's P . K . `
     }
 }
