@@ -8,6 +8,7 @@
 
 namespace Tests\Feature;
 
+use App\Project;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -50,14 +51,44 @@ class ManageProjectsTest extends TestCase
         $attributes = [
             'title' => $this->faker->sentence,
             'description' => $this->faker->sentence,
+            'notes' => 'General notes here.',
         ];
 
         // when & then
-        $this->post('/projects', $attributes)->assertRedirect('/projects');
+        $response = $this->post('/projects', $attributes);
+
+        $project = Project::where($attributes)->first();
+        $response->assertRedirect($project->path());
 
         $this->assertDatabaseHas('projects', $attributes);
 
-        $this->get('/projects')->assertSee($attributes['title']);
+        $this->get($project->path())
+            ->assertSee($attributes['title'])
+            ->assertSee($attributes['description'])
+            ->assertSee($attributes['notes']);
+    }
+
+    /**
+     * @test
+     */
+    public function a_user_can_update_a_project()
+    {
+
+        $this->signIn();
+
+        $this->withoutExceptionHandling();
+
+        // given
+        $project = factory('App\Project')->create(['owner_id' => auth()->id()]);
+
+        $this->patch($project->path(), [
+            'notes' => 'Changed',
+        ])->assertRedirect($project->path());
+
+        $this->assertDatabaseHas('projects', [
+            'notes' => 'Changed',
+        ]);
+
     }
 
     /**
@@ -90,6 +121,20 @@ class ManageProjectsTest extends TestCase
 
         // when & then
         $this->get($project->path())->assertStatus(403);
+    }
+
+    /**
+     * @test
+     */
+    public function an_authenticated_user_cannot_update_the_projects_of_others()
+    {
+        $this->signIn();
+
+        // given
+        $project = factory('App\Project')->create();
+
+        // when & then
+        $this->patch($project->path(), [])->assertStatus(403);
     }
 
     /**
