@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Project;
+use Facades\Tests\Setup\ProjectFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -15,13 +15,11 @@ class ProjectTasksTest extends TestCase
      */
     public function a_project_can_have_tasks()
     {
-        $this->signIn();
+        $project = ProjectFactory::withTasks(1)
+            ->create();
 
-        $project = auth()->user()->projects()->create(
-            factory(Project::class)->raw()
-        );
-
-        $this->post($project->path() . '/tasks', ['body' => 'Test Task']);
+        $this->actingAs($project->owner)
+            ->post($project->path() . '/tasks', ['body' => 'Test Task']);
 
         $this->get($project->path())
             ->assertSee('Test Task');
@@ -49,17 +47,14 @@ class ProjectTasksTest extends TestCase
      */
     public function a_task_can_be_updated()
     {
-        $this->signIn();
-        $project = auth()->user()->projects()->create(
-            factory(Project::class)->raw()
-        );
+        $project = ProjectFactory::withTasks(1)
+            ->create();
 
-        $task = $project->addTask('Test Task');
-
-        $this->patch($task->path(), [
-            'body' => 'changed',
-            'completed' => true,
-        ]);
+        $this->actingAs($project->owner)
+            ->patch($project->tasks->first()->path(), [
+                'body' => 'changed',
+                'completed' => true,
+            ]);
 
         $this->assertDatabaseHas('tasks', [
             'body' => 'changed',
@@ -76,11 +71,10 @@ class ProjectTasksTest extends TestCase
 
         $this->signIn();
 
-        $project = factory('App\Project')->create();
+        $project = ProjectFactory::withTasks(1)
+            ->create();
 
-        $task = $project->addTask('Task Test');
-
-        $this->patch($task->path(), ['body' => 'changed'])
+        $this->patch($project->tasks->first()->path(), ['body' => 'changed'])
             ->assertStatus(403);
 
         $this->assertDatabaseMissing('tasks', ['body' => 'changed']);
@@ -93,11 +87,9 @@ class ProjectTasksTest extends TestCase
     {
         $this->signIn();
 
-        $project = auth()->user()->projects()->create(
-            factory(Project::class)->raw()
-        );
+        $project = ProjectFactory::create();
 
         $attributes = factory('App\Task')->raw(['body' => '']);
-        $this->post($project->path() . '/tasks', $attributes)->assertSessionHasErrors('body');
+        $this->actingAs($project->owner)->post($project->path() . '/tasks', $attributes)->assertSessionHasErrors('body');
     }
 }
