@@ -24,39 +24,45 @@
                                 <div class="flex">
                                     <input name="body" class="w-full {{$task->completed ? 'text-grey' : ''}}"
                                            value="{{$task->body}}"/>
-                                    <input type="checkbox" name="completed"
-                                           onchange="this.form.submit();"
-                                           value={{$task->completed}}"
-                                           {{$task->completed ? 'checked' : ''}}/>
+                                    <input type="checkbox" name="completed" onchange="this.form.submit();"
+                                           value="{{$task->completed}}" {{$task->completed ? 'checked' : ''}}/>
                                 </div>
                             </form>
                         </div>
                     @endforeach
 
-                                               <div class=" card mb-3">
-                                    <form action="{{$project->path() ."/tasks"}}" method="POST">
-                                        @csrf
-                                        <input name="body" class="w-full" placeholder="Add a new task"/>
-                                    </form>
-                                </div>
-                        </div>
-
-                        <div>
-                            <h2 class="text-grey font-normal text-lg mb-3">General Notes</h2>
-
-                            {{-- general notes--}}
-                            <form method="POST" action="{{$project->path()}}">
-                                @csrf
-                                @method('PATCH')
-                                <textarea name="notes" class="card w-full mb-4" style="min-height: 200px;"
-                                          placeholder="Anything special that you want to make a note of?">{{$project->notes}}</textarea>
-                                <button type="submit" class="button">Save</button>
-                            </form>
-                        </div>
+                    <div class="card mb-3">
+                        <form action="{{$project->path() ."/tasks"}}" method="POST">
+                            @csrf
+                            <input name="body" class="w-full" placeholder="Add a new task"/>
+                        </form>
+                    </div>
                 </div>
-                <div class="lg:w-1/4 px-3">
-                    @include('projects.card')
+
+                <div>
+                    <h2 class="text-grey font-normal text-lg mb-3">General Notes</h2>
+
+                    {{-- general notes--}}
+                    <form method="POST" action="{{$project->path()}}">
+                        @csrf
+                        @method('PATCH')
+                        <textarea name="notes" class="card w-full mb-4" style="min-height: 200px;"
+                                  placeholder="Anything special that you want to make a note of?">{{$project->notes}}</textarea>
+                        <button type="submit" class="button">Save</button>
+                    </form>
+
+                    @if($errors->any())
+                        <div class="field mt-6">
+                            @foreach($errors->all() as $error)
+                                <li class="text-sm text-red">{{$error}}</li>
+                            @endforeach
+                        </div>
+                    @endif
                 </div>
             </div>
+            <div class="lg:w-1/4 px-3">
+                @include('projects.card')
+            </div>
+        </div>
     </main>
 @endsection
