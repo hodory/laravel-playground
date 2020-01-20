@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdateProjectRequest;
 use App\Project;
 
 class ProjectsController extends Controller
@@ -53,18 +54,13 @@ class ProjectsController extends Controller
     }
 
     /**
+     * @param UpdateProjectRequest $request
      * @param Project $project
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function update(Project $project)
+    public function update(UpdateProjectRequest $request)
     {
-        $this->authorize('update', $project);
-
-        // validate
-        $project->update($this->validateRequest());
-
-        return redirect($project->path());
+        return redirect($request->save()->path());
     }
 
     public function edit(Project $project)
