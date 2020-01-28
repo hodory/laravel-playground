@@ -2,7 +2,6 @@
 
 namespace App\Observers;
 
-use App\Activity;
 use App\Project;
 
 class ProjectObserver
@@ -15,15 +14,7 @@ class ProjectObserver
      */
     public function created(Project $project)
     {
-        $this->recordActivity($project, 'created');
-    }
-
-    protected function recordActivity(Project $project, $type)
-    {
-        Activity::create([
-            'project_id' => $project->id,
-            'description' => $type,
-        ]);
+        $project->recordActivity('created');
     }
 
     /**
@@ -34,6 +25,6 @@ class ProjectObserver
      */
     public function updated(Project $project)
     {
-        $this->recordActivity($project, 'updated');
+        $project->recordActivity('updated');
     }
 }

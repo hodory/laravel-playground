@@ -36,8 +36,8 @@ class ProjectFactory
             'owner_id' => $this->user ?? factory(User::class),
         ]);
 
-        factory(Task::class)->create([
-            'project_id' => $project->id,
+        factory(Task::class, $this->tasksCount)->create([
+            'project_id' => $project,
         ]);
 
         return $project;
