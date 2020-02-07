@@ -24,8 +24,8 @@
                                 <div class="flex">
                                     <input name="body" class="w-full {{$task->completed ? 'text-grey' : ''}}"
                                            value="{{$task->body}}"/>
-                                    <input type="checkbox" name="completed" onchange="this.form.submit();"
-                                           value="{{$task->completed}}" {{$task->completed ? 'checked' : ''}}/>
+                                    <input type="checkbox" name="completed"
+                                           onchange="this.form.submit();"{{$task->completed ? 'checked' : ''}}/>
                                 </div>
                             </form>
                         </div>
@@ -60,8 +60,10 @@
                     @endif
                 </div>
             </div>
-            <div class="lg:w-1/4 px-3">
+            <div class="lg:w-1/4 px-3 lg:py-8">
                 @include('projects.card')
+
+                @include('projects.activity.card')
             </div>
         </div>
     </main>
