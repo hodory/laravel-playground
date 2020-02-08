@@ -10,6 +10,7 @@ namespace App;
 
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
 
 class Project extends Model
 {
@@ -40,15 +41,22 @@ class Project extends Model
     {
         $this->activity()->create([
             'description' => $description,
-            'changes' => [
-                'before' => array_diff($this->old, $this->getAttributes()),
-                'after' => array_diff($this->getAttributes(), $this->old),
-            ],
+            'changes' => $this->activityChanges($description),
         ]);
     }
 
     public function activity()
     {
         return $this->hasMany(Activity::class)->latest();
+    }
+
+    protected function activityChanges($description)
+    {
+        if ($description === 'updated') {
+            return [
+                'before' => Arr::except(array_diff($this->old, $this->getAttributes()), 'updated_at'),
+                'after' => Arr::except($this->getChanges(), 'updated_at'),
+            ];
+        }
     }
 }
