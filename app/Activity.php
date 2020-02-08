@@ -8,6 +8,10 @@ class Activity extends Model
 {
     protected $guarded = [];
 
+    protected $casts = [
+        'changes' => 'array'
+    ];
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\MorphTo
      */

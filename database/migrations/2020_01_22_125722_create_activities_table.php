@@ -17,9 +17,8 @@ class CreateActivitiesTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('project_id');
             $table->nullableMorphs('subject');
-//            $table->unsignedBigInteger('subject_id');
-//            $table->string('subject_type');
             $table->string('description');
+            $table->text('changes')->nullable();
             $table->timestamps();
 
             $table->foreign('project_id')
