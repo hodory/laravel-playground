@@ -27,4 +27,12 @@ class TaskObserver
     {
         $task->recordActivity('deleted_task');
     }
+
+    /**
+     * @param Task $task
+     */
+    public function updating(Task $task)
+    {
+        $task->old = $task->getOriginal();
+    }
 }
