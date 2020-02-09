@@ -9,6 +9,7 @@ class Task extends Model
 
     use RecordsActivity;
 
+    protected static $recordableEvents = ["created", "deleted"];
     protected $guarded = [];
     protected $touches = [
         'project',

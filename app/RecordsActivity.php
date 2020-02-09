@@ -11,7 +11,38 @@ trait RecordsActivity
     /**
      * @var array
      */
-    public $old = [];
+    public $oldAttributes = [];
+
+    /**
+     * Boot the trait
+     */
+    public static function bootRecordsActivity()
+    {
+        foreach (self::recordableEvents() as $event) {
+            static::$event(function ($model) use ($event) {
+                $model->recordActivity($model->activityDescription($event));
+            });
+
+
+            if ($event === 'updated') {
+                static::updating(function ($model) {
+                    $model->oldAttributes = $model->getOriginal();
+                });
+            }
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public static function recordableEvents(): array
+    {
+        if (isset(static::$recordableEvents)) {
+            return static::$recordableEvents;
+        }
+
+        return ['created', 'updated', 'deleted'];
+    }
 
     /**
      * @param $description
@@ -32,7 +63,7 @@ trait RecordsActivity
     {
         if ($this->wasChanged()) {
             return [
-                'before' => Arr::except(array_diff($this->old, $this->getAttributes()), 'updated_at'),
+                'before' => Arr::except(array_diff($this->oldAttributes, $this->getAttributes()), 'updated_at'),
                 'after' => Arr::except($this->getChanges(), 'updated_at'),
             ];
         }
@@ -44,5 +75,10 @@ trait RecordsActivity
     public function activity()
     {
         return $this->morphMany(Activity::class, 'subject')->latest();
+    }
+
+    protected function activityDescription($description)
+    {
+        return "{$description}_" . strtolower(class_basename($this)); // created_task
     }
 }
