@@ -8,7 +8,6 @@
 
 namespace Tests\Feature;
 
-use App\Project;
 use Facades\Tests\Setup\ProjectFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -41,9 +40,6 @@ class ManageProjectsTest extends TestCase
      */
     public function a_user_can_create_a_project()
     {
-        // Exception Handling 처리 제외
-        $this->withoutExceptionHandling();
-
         // given
         $this->signIn();
 
@@ -56,13 +52,10 @@ class ManageProjectsTest extends TestCase
             'notes' => 'General notes here.',
         ];
 
+//        $attributes = factory(Project::class)->raw();
+
         // when & then
-        $response = $this->post('/projects', $attributes);
-
-        $project = Project::where($attributes)->first();
-        $response->assertRedirect($project->path());
-
-        $this->get($project->path())
+        $this->followingRedirects()->post('/projects', $attributes)
             ->assertSee($attributes['title'])
             ->assertSee($attributes['description'])
             ->assertSee($attributes['notes']);
@@ -99,11 +92,13 @@ class ManageProjectsTest extends TestCase
         $this->delete($project->path())
             ->assertRedirect('/login');
 
-        $this->signIn();
+        $user = $this->signIn();
 
         $this->delete($project->path())->assertStatus(403);
 
-//        $this->assertDatabaseMissing('projects', $project->only('id'));
+        $project->invite($user);
+
+        $this->actingAs($user)->delete($project->path())->assertStatus(403);
     }
 
     /**
