@@ -3,8 +3,8 @@
 @section('content')
     <header class="flex items-center mb-4 py-4">
         <div class="flex justify-between items-end w-full">
-            <p class="text-grey text-sm font-normal">
-                <a href="/projects" class="text-grey text-sm font-normal no-underline">My Projects</a>
+            <p class="text-default text-sm font-normal">
+                <a href="/projects" class="text-default text-sm font-normal no-underline">My Projects</a>
                 / {{$project->title}}
             </p>
             <div class="flex items-center">
@@ -24,7 +24,7 @@
         <div class="lg:flex -mx-3">
             <div class="lg:w-3/4 px-3 mb-6">
                 <div class="mb-8">
-                    <h2 class="text-grey font-normal text-lg mb-3">Tasks</h2>
+                    <h2 class="text-default font-normal text-lg mb-3">Tasks</h2>
                     @foreach($project->tasks as $task)
                         <div class="card mb-3">
                             <form method="POST" action="{{$task->path()}}">
@@ -32,7 +32,8 @@
                                 @csrf
 
                                 <div class="flex">
-                                    <input name="body" class="w-full {{$task->completed ? 'text-grey' : ''}}"
+                                    <input name="body"
+                                           class="bg-card text-default w-full {{$task->completed ? 'text-default' : ''}}"
                                            value="{{$task->body}}"/>
                                     <input type="checkbox" name="completed"
                                            onchange="this.form.submit();"{{$task->completed ? 'checked' : ''}}/>
@@ -44,13 +45,13 @@
                     <div class="card mb-3">
                         <form action="{{$project->path() ."/tasks"}}" method="POST">
                             @csrf
-                            <input name="body" class="w-full" placeholder="Add a new task"/>
+                            <input name="body" class="bg-card text-default w-full" placeholder="Add a new task"/>
                         </form>
                     </div>
                 </div>
 
                 <div>
-                    <h2 class="text-grey font-normal text-lg mb-3">General Notes</h2>
+                    <h2 class="text-default font-normal text-lg mb-3">General Notes</h2>
 
                     {{-- general notes--}}
                     <form method="POST" action="{{$project->path()}}">
