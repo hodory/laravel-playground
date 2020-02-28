@@ -19,9 +19,9 @@
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
-<body class="theme-dark bg-page">
+<body class="theme-light bg-page">
 <div id="app">
-    <nav class="theme-dark bg-header">
+    <nav class="bg-header">
         <div class="container mx-auto">
             <div class="flex justify-between items-center py-2">
                 <h1>
@@ -46,7 +46,9 @@
                 </h1>
 
                 <div>
-
+                    <div id="theme-switcher">
+                        <theme-switcher></theme-switcher>
+                    </div>
                     <!-- Right Side Of Navbar -->
                     <div class="flex items-center ml-auto list-reset">
                         <!-- Authentication Links -->
@@ -56,9 +58,6 @@
                                 <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
                             @endif
                         @else
-                            <div class="flex items-center mr-10">
-                                <button class="rounded-full w-4 h-4 bg-default border border-accent mr-2"></button>
-                            </div>
                             <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                 {{ Auth::user()->name }} <span class="caret"></span>
