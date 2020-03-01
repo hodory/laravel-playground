@@ -68955,28 +68955,42 @@ function (_Component) {
       this.setState({
         selectedTheme: selectedTheme
       });
+      localStorage.setItem('theme', selectedTheme);
       document.body.className = document.body.className.replace(/theme-\w+/, selectedTheme);
+    }
+  }, {
+    key: "renderMethod",
+    value: function renderMethod() {
+      var _this2 = this;
+
+      return this.state.themes.map(function (theme, index) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          key: index,
+          className: "rounded-full w-4 h-4 bg-default border border-accent mr-2 focus:outline-none",
+          onClick: function onClick() {
+            return _this2._onClick(theme.color);
+          },
+          style: theme.style
+        });
+      });
     }
   }, {
     key: "render",
     value: function render() {
-      var _this2 = this;
-
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "flex items-center mr-10"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        className: "rounded-full w-4 h-4 bg-default border border-accent mr-2 focus:outline-none",
-        onClick: function onClick() {
-          return _this2._onClick("theme-light");
-        },
-        style: THEME_LIGHT_STYLE
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        className: "rounded-full w-4 h-4 bg-default border border-accent mr-2 focus:outline-none",
-        onClick: function onClick() {
-          return _this2._onClick("theme-dark");
-        },
-        style: THEME_DARK_STYLE
-      }));
+      }, this.renderMethod());
+    }
+  }], [{
+    key: "getDerivedStateFromProps",
+    value: function getDerivedStateFromProps(nextProps, prevState) {
+      if (localStorage.getItem('theme')) {
+        var theme = localStorage.getItem('theme');
+        document.body.className = document.body.className.replace(/theme-\w+/, theme);
+        return {
+          selectedTheme: theme
+        };
+      }
     }
   }]);
 
