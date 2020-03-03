@@ -47,6 +47,7 @@ let colors = {
     'transparent': 'transparent',
 
     'default': 'var(--text-default-color)',
+    'errors': 'var(--text-error-color)',
 
     'black': '#22292f',
     'grey-darkest': '#3d4852',
