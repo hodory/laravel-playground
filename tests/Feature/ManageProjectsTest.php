@@ -8,6 +8,7 @@
 
 namespace Tests\Feature;
 
+use App\Project;
 use Facades\Tests\Setup\ProjectFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -59,6 +60,29 @@ class ManageProjectsTest extends TestCase
             ->assertSee($attributes['title'])
             ->assertSee($attributes['description'])
             ->assertSee($attributes['notes']);
+    }
+
+    /**
+     * @test
+     */
+    public function tasks_can_be_includeed_as_part_a_new_project_creation()
+    {
+        $this->signIn();
+
+        $attributes = factory(Project::class)->raw();
+
+        $attributes['tasks'] = [
+            [
+                'body' => 'Task 1',
+            ],
+            [
+                'body' => 'Task 2',
+            ],
+        ];
+
+        $this->post('/projects', $attributes);
+
+        $this->assertCount(2, Project::first()->tasks);
     }
 
     /**
