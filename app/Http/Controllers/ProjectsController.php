@@ -65,7 +65,6 @@ class ProjectsController extends Controller
 
     /**
      * @param UpdateProjectRequest $request
-     * @param Project $project
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function update(UpdateProjectRequest $request)
