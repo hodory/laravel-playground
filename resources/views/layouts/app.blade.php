@@ -58,7 +58,8 @@
 
                             <dropdown align="right" width="200px">
                                 <template v-slot:trigger>
-                                    <button class="flex items-center text-default no-underline text-sm">
+                                    <button
+                                        class="flex items-center text-default no-underline text-sm focus:outline-none">
                                         <img width="35"
                                              class="rounded-full mr-3"
                                              src="{{ gravatar_url(auth()->user()->email) }}">
@@ -67,15 +68,11 @@
                                     </button>
                                 </template>
 
-                                <a href="#"
-                                   class="block text-default no-underline hover:underline text-sm leading-loose px-4">Item
-                                    1</a>
-                                <a href="#"
-                                   class="block text-default no-underline hover:underline text-sm leading-loose px-4">Item
-                                    2</a>
-                                <a href="#"
-                                   class="block text-default no-underline hover:underline text-sm leading-loose px-4">Item
-                                    3</a>
+                                <form id="logout-form" method="POST" action="/logout">
+                                    @csrf
+
+                                    <button type="submit" class="dropdown-menu-link w-full text-left">Logout</button>
+                                </form>
                             </dropdown>
                         @endguest
                     </div>

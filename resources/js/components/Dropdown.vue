@@ -1,7 +1,7 @@
 <template>
     <div class="dropdown relative">
         <!-- trigger -->
-        <div @click.prevent="isOpen = !isOpen">
+        <div class="dropdown-toggle" aria-haspopup="true" :aria-expanded="isOpen" @click.prevent="isOpen = !isOpen">
             <slot name="trigger"></slot>
         </div>
 
@@ -20,8 +20,27 @@
             width: {default: 'auto'},
             align: {default: 'left'}
         },
+
         data() {
             return {isOpen: false}
+        },
+
+        watch: {
+            isOpen(isOpen) {
+                if (isOpen) {
+                    document.addEventListener('click', this.closeIfClickedOutside);
+                }
+            }
+        },
+
+        methods: {
+            closeIfClickedOutside(event) {
+                if (event.target.closest('.dropdown')) {
+                    this.isOpen = false;
+
+                    document.removeEventListener('click', this.closeIfClickedOutside);
+                }
+            }
         }
     }
 </script>
