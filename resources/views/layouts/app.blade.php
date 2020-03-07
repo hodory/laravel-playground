@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -56,20 +56,27 @@
                         @else
                             <theme-switcher></theme-switcher>
 
-                            <a
-                                class="flex items-center text-default no-underline text-sm"
-                                href="#" role="button"
-                                data-toggle="dropdown"
-                                aria-haspopup="true"
-                                aria-expanded="false"
-                                v-pre
-                            >
-                                <img width="35"
-                                     class="rounded-full mr-3"
-                                     src="{{ gravatar_url(auth()->user()->email) }}">
+                            <dropdown align="right" width="200px">
+                                <template v-slot:trigger>
+                                    <button class="flex items-center text-default no-underline text-sm">
+                                        <img width="35"
+                                             class="rounded-full mr-3"
+                                             src="{{ gravatar_url(auth()->user()->email) }}">
 
-                                JeffreyWay
-                            </a>
+                                        {{auth()->user()->name}}
+                                    </button>
+                                </template>
+
+                                <a href="#"
+                                   class="block text-default no-underline hover:underline text-sm leading-loose px-4">Item
+                                    1</a>
+                                <a href="#"
+                                   class="block text-default no-underline hover:underline text-sm leading-loose px-4">Item
+                                    2</a>
+                                <a href="#"
+                                   class="block text-default no-underline hover:underline text-sm leading-loose px-4">Item
+                                    3</a>
+                            </dropdown>
                         @endguest
                     </div>
                 </div>

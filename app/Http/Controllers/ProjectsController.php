@@ -26,7 +26,7 @@ class ProjectsController extends Controller
         $project = auth()->user()->projects()->create($this->validateRequest());
 
         if ($tasks = request('tasks')) {
-            if (!empty(request('tasks')[0]['body'])) {
+            if (!empty($tasks[0]['body'])) {
                 $project->addTasks(request('tasks'));
             }
         }
