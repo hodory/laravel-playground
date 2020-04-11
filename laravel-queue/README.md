@@ -29,3 +29,14 @@ dispatch 되는 부분에서 exception이 발생할 경우, 재시도 횟수를 
 ```shell
 $ php artisan queue:work --tries=3
 ```
+
+## 대기열 분리
+
+`job->onQueue()`를 이용하여, 어떤 대기열에 두고 실행할지 설정 할 수 있다.
+
+queue worker별로 실행하고자 하는 대기열 그룹을 지정해서 실행 할 수 있다. 
+
+horizon으로 실행하였을때 로컬에서 실행대상의 기본값은 default이고,
+
+`config/horizon.php` 파일의 `environments.local.supervisor-1.queue`의 값을 변경하여,<br/>
+여러개의 실행 대상 그룹을 지정할 수 있다. 

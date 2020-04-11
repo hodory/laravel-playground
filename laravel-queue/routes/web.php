@@ -18,7 +18,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     $user = factory(User::class)->create();
 
-    ReconcileAccount::dispatch($user);
+    ReconcileAccount::dispatch($user)
+        ->onQueue('high');
 
     return 'Finished';
 });
