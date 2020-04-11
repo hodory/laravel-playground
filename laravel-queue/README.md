@@ -56,3 +56,5 @@ $ php artisan migrate
 ```
 
 물론 6버전 이후로는 Whoops 오류 페이지에서 바로 수정 가능한 기능을 제공하고 있다. 
+-> [ignition](https://github.com/facade/ignition) 이라는 훌륭한 기능으로,<br/>
+Laravel6에서는 기본 에러페이지이고, 5.5이후부터 사용 가능하다고 한다.
