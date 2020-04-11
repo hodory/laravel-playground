@@ -40,3 +40,19 @@ horizon으로 실행하였을때 로컬에서 실행대상의 기본값은 defau
 
 `config/horizon.php` 파일의 `environments.local.supervisor-1.queue`의 값을 변경하여,<br/>
 여러개의 실행 대상 그룹을 지정할 수 있다. 
+
+
+## "SQLSTATE[42S02]: Base table or view not found: 1146 Table 'homestead.jobs' doesn't exist"
+
+.env 파일의 `QUEUE_CONNECTION` 를 database로 설정시, 위와 같은 오류가 발생한다면,<br/>
+Exception 메세지에도 나와 있지만, 해당 테이블이 없어서 발생하는 문제이다.
+
+이때는 아래 명령을 쉘에서 실행하여,<br/>
+job 테이블을 생성하는 migration 파일을 만드는 명령을 호출하고, 마이그레이션을 실행한다.
+
+```shell
+$ php artisan queue:table
+$ php artisan migrate
+```
+
+물론 6버전 이후로는 Whoops 오류 페이지에서 바로 수정 가능한 기능을 제공하고 있다. 
