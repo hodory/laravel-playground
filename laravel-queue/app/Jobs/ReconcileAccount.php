@@ -28,11 +28,13 @@ class ReconcileAccount implements ShouldQueue
 
     /**
      * Execute the job.
-     *
-     * @return void
+     * @param $string
+     * @param $next
+     * @return mixed
      */
-    public function handle()
+    public function handle($string, $next)
     {
-        logger('Reconciling the user : '. $this->user->name);
+        logger('Reconciling the user : ' . $this->user->name);
+        return $next('Something else');
     }
 }
