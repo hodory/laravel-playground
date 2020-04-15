@@ -21,7 +21,7 @@ Route::get('/', function () {
     $pipeline->send('hello freaking world')// data
     ->through([ // pipes
         function ($string, $next) {
-            $string = ucwords($string);
+            $string = ucwords($string); // Hello Freaking World
 
             return $next($string);
         },

@@ -58,3 +58,12 @@ $ php artisan migrate
 물론 6버전 이후로는 Whoops 오류 페이지에서 바로 수정 가능한 기능을 제공하고 있다. 
 -> [ignition](https://github.com/facade/ignition) 이라는 훌륭한 기능으로,<br/>
 Laravel6에서는 기본 에러페이지이고, 5.5이후부터 사용 가능하다고 한다.
+
+## `ShouldQueue` 인터페이스를 상속 받지 않으면 어떻게 될까?
+
+Queue 클래스에서 ShouldQueue 인터페이스를 상속하지 않을 경우,
+Queue에 넣어두는게 아닌 바로 호출된다. 
+
+laravel/framework@v7.5 기준 `laravel/framework/src/Illuminate/Bus/Dispatcher.php`의 dispatch()에서
+
+`$command instanceof ShouldQueue`가 아닐 경우 dispatchNow() 메소드를 호출하게 되어 있다.
