@@ -1,7 +1,8 @@
 <?php
 
 use App\Jobs\ReconcileAccount;
-use Illuminate\Pipeline\Pipeline;
+use App\User;
+use Illuminate\Bus\Dispatcher;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,26 +17,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    $pipeline = app(Pipeline::class);
+    $user = factory(User::class)->create();
 
-    $pipeline->send('hello freaking world')// data
-    ->through([ // pipes
-        function ($string, $next) {
-            $string = ucwords($string); // Hello Freaking World
+    $job = new ReconcileAccount($user);
 
-            return $next($string);
-        },
-        function ($string, $next) {
-            $string = str_ireplace('freaking', '', $string); // Hello  World
-
-            return $next($string);
-        },
-
-        ReconcileAccount::class // Something else
-    ])
-        ->then(function ($string) {
-            dump($string);
-        });
+    resolve(Dispatcher::class)->dispatch($job);
 
     return 'Done';
 });
