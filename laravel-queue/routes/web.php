@@ -2,7 +2,7 @@
 
 use App\Jobs\ReconcileAccount;
 use App\User;
-use Illuminate\Pipeline\Pipeline;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,11 +21,7 @@ Route::get('/', function () {
 
     $job = new ReconcileAccount($user);
 
-    $pipeline = new Pipeline(app());
-
-    $pipeline->send($job)->through([])->then(function () use ($job) {
-        $job->handle();
-    });
+    Bus::dispatch($job);
 
     return 'Done';
 });
