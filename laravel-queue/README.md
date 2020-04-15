@@ -67,3 +67,19 @@ Queue에 넣어두는게 아닌 바로 호출된다.
 laravel/framework@v7.5 기준 `laravel/framework/src/Illuminate/Bus/Dispatcher.php`의 dispatch()에서
 
 `$command instanceof ShouldQueue`가 아닐 경우 dispatchNow() 메소드를 호출하게 되어 있다.
+
+
+## dispatch 에서 직접 handle 메소드를 호출하지 않는 이유
+
+```php
+<?php
+# vendor/laravel/framework/src/Illuminate/Bus/Dispatcher.php
+//...
+$callback = function ($command) {
+    return $this->container->call([$command, 'handle']);
+};
+//...
+```
+
+dispatch에서 `$command->handle()`과 같이 바로 실행하는게 아닌 container를 이용하여 call을 하는 이유는<br/>
+handle 메소드에서 Dependency Injection이 필요한 경우를 위해서이다. 
